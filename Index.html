@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Win95-97 Comic Concept</title>
+<style>
+  html, body {
+    margin: 0;
+    overflow: hidden;
+    height: 100%;
+    background-color: #C0C0C0; /* Classic Win95 gray */
+    font-family: "MS Sans Serif", Tahoma, sans-serif;
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js"></script>
+</head>
+<body>
+
+<canvas id="comicCanvas" resize></canvas>
+
+<script type="text/paperscript" canvas="comicCanvas">
+  // Define Win95 colors
+  var win95Colors = {
+    light: new Color('#FFFFFF'),
+    dark: new Color('#808080'),
+    mid: new Color('#C0C0C0'),
+    darkBlue: new Color('#000080'),
+    buttonFace: new Color('#C0C0C0'),
+    buttonShadow: new Color('#808080'),
+    buttonHighlight: new Color('#FFFFFF'),
+    buttonDarkShadow: new Color('#000000')
+  };
+
+  // Function to draw a basic Win95-style window frame
+  function drawWin95Window(bounds, title = "Comic Panel") {
+    var group = new Group();
+    var background = new Path.Rectangle(bounds);
+    background.fillColor = win95Colors.mid;
+    group.addChild(background);
+    var outerBevel = new Path.Rectangle(bounds);
+    outerBevel.strokeColor = win95Colors.light;
+    outerBevel.strokeWidth = 2;
+    group.addChild(outerBevel);
+    var innerBevelBounds = new Rectangle(bounds.x + 1, bounds.y + 1, bounds.width - 2, bounds.height - 2);
+    var innerBevel = new Path.Rectangle(innerBevelBounds);
+    innerBevel.strokeColor = win95Colors.dark;
+    innerBevel.strokeWidth = 1;
+    group.addChild(innerBevel);
+    var titleBarHeight = 20;
+    var titleBarBounds = new Rectangle(bounds.x + 2, bounds.y + 2, bounds.width - 4, titleBarHeight);
+    var titleBar = new Path.Rectangle(titleBarBounds);
+    titleBar.fillColor = win95Colors.darkBlue;
+    group.addChild(titleBar);
+    var titleText = new PointText({
+        point: new Point(bounds.x + 6, bounds.y + 2 + titleBarHeight / 2 + 4),
+        content: title,
+        fillColor: 'white',
+        fontFamily: '"MS Sans Serif", Tahoma, sans-serif',
+        fontSize: 12
+    });
+    group.addChild(titleText);
+    var contentBounds = new Rectangle(bounds.x + 2, bounds.y + 2 + titleBarHeight, bounds.width - 4, bounds.height - 4 - titleBarHeight);
+    var contentArea = new Path.Rectangle(contentBounds);
+    contentArea.fillColor = 'white';
+    group.addChild(contentArea);
+    return group;
+  }
+
+  // Function to draw a basic Win95-style button
+  function drawWin95Button(bounds, text = "Button") {
+    var group = new Group();
+    var buttonFace = new Path.Rectangle(bounds);
+    buttonFace.fillColor = win95Colors.buttonFace;
+    group.addChild(buttonFace);
+    var highlightTop = new Path([bounds.topLeft, bounds.topRight, bounds.bottomRight]);
+    highlightTop.strokeColor = win95Colors.buttonHighlight;
+    highlightTop.strokeWidth = 1;
+    group.addChild(highlightTop);
+    var highlightLeft = new Path([bounds.topLeft, bounds.bottomLeft, bounds.bottomRight]);
+    highlightLeft.strokeColor = win95Colors.buttonHighlight;
+    highlightLeft.strokeWidth = 1;
+    group.addChild(highlightLeft);
+    var shadowBottom = new Path([bounds.bottomRight, bounds.topRight, bounds.topLeft]);
+    shadowBottom.strokeColor = win95Colors.buttonShadow;
+    shadowBottom.strokeWidth = 1;
+    group.addChild(shadowBottom);
+    var shadowRight = new Path([bounds.bottomRight, bounds.bottomLeft, bounds.topLeft]);
+    shadowRight.strokeColor = win95Colors.buttonShadow;
+    shadowRight.strokeWidth = 1;
+    group.addChild(shadowRight);
+    var buttonText = new PointText({
+        point: bounds.center,
+        content: text,
+        fillColor: 'black',
+       
